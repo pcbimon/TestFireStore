@@ -34,6 +34,7 @@ async function login () {
         title: 'Success',
         text: 'Found User'
       }).then((result) => {
+        alert('Success')
         window.location = './user.html'
       })
     } else {
