@@ -1,49 +1,56 @@
-import { initializeApp } from 'firebase/app'
-import { getFirestore } from 'firebase/firestore'
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: 'AIzaSyDItZiRnZ2apuIYbtoZRel_dpElgi6F4o0',
-  authDomain: 'mon-abvltw.firebaseapp.com',
-  databaseURL: 'https://mon-abvltw.firebaseio.com',
-  projectId: 'mon-abvltw',
-  storageBucket: 'mon-abvltw.appspot.com',
-  messagingSenderId: '16352393465',
-  appId: '1:16352393465:web:0cc9d5c6ae2438f69c4a28'
-}
-
-// Initialize Firebase
-const firebaseApp = initializeApp(firebaseConfig)
-// Initialize Firestore
-const db = getFirestore(firebaseApp)
+import * as Swal from 'sweetalert2'
+import { query, collection, getDocs, where } from 'firebase/firestore'
+import db from './firebaseconfig'
 console.log(db)
 
-// Init User to fire store
-// const docRef = await addDoc(collection(db, "user"), {
-//     first: "Patipat",
-//     last: "Chewprecha",
-//     email: "pcbimon@gmail.com",
-//     password: "Test@001",
-//     createdAt: Timestamp.now(),
-//   });
-//   console.log("Document written with ID: ", docRef.id);
+// login form
+const loginFrm = document.getElementById('loginFrm')
+// loginFrm.onsubmit = async function (ev) { await login(ev) }
+loginFrm.addEventListener('submit', async (event) => {
+  event.preventDefault()
+  await login()
+})
 
-// async function login() {
-//     const username = document.getElementById('username');
-//     const password = document.getElementById('password');
-//     try {
-//         const q = query(
-//             collection(db, "user"),
-//             where("email", "==", username),where("password","==",password)
-//         );
-//         const querySnapshot = await getDocs(q);
-//         if (!querySnapshot.empty) {
-//             console.log('found');
-//         } else {
-//             console.log('not found');
-//         }
-
-//     } catch (e) {
-//         console.error("Error document: ", e);
-//     }
-// }
+async function login () {
+  const username = document.getElementById('username')
+  const password = document.getElementById('password')
+  Swal.fire({
+    title: 'Gethering Data.....',
+    didOpen: () => {
+      Swal.showLoading()
+    }
+  })
+  try {
+    const q = query(
+      collection(db, 'user'),
+      where('email', '==', username.value), where('password', '==', password.value)
+    )
+    const querySnapshot = await getDocs(q)
+    if (!querySnapshot.empty) {
+      Swal.close()
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Found User'
+      })
+    } else {
+      Swal.close()
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Not Found User'
+      }).then((result) => {
+        window.location = './register.html'
+      })
+    }
+  } catch (e) {
+    console.error('Error document: ', e)
+    Swal.close()
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Error'
+    })
+  }
+}
