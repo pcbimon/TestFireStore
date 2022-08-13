@@ -33,6 +33,8 @@ async function login () {
         icon: 'success',
         title: 'Success',
         text: 'Found User'
+      }).then((result) => {
+        window.location = './user.html'
       })
     } else {
       Swal.close()
