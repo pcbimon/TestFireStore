@@ -2,7 +2,8 @@ module.exports = {
   entry: {
     index: './src/index.js',
     register: './src/register.js',
-    user: './src/user.js'
+    user: './src/user.js',
+    viewusr: './src/viewusr.js'
   },
   output: {
     filename: '[name].js',

@@ -70,7 +70,10 @@ function addRowHandlers () {
                   cRow.classList.remove('selected-row')
                 }
                 row.classList.add('selected-row')
-                showDataOnRow(dusers[parseInt(id - 1)])
+                // click row to show data
+                // showDataOnRow(dusers[parseInt(id - 1)])
+                // click row to redirect new page with param
+                showUserSelected(dusers[parseInt(id - 1)].id)
               }
             }
 
@@ -80,4 +83,7 @@ function addRowHandlers () {
 function showDataOnRow (user) {
   const result = document.getElementById('selectedUser')
   result.textContent = JSON.stringify(user, undefined, 2)
+}
+function showUserSelected (id) {
+  window.location = './viewusr.html?id=' + id
 }
